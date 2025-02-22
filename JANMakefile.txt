@@ -1,0 +1,47 @@
+SRCS	= philo.c
+
+SRCS	+= actions.c philo_init.c utils.c monitor.c threads.c eat_action.c
+
+SANITIZE_FLAGS = -fsanitize=thread -g
+
+OBJS	= $(SRCS:.c=.o)
+
+NAME	= philo
+
+CC 		= gcc
+
+FLAGS	= -Wall -Wextra -Werror
+
+TARGET	= philo
+
+INCLUDE	= -lpthread
+
+HEADER	= philo.h
+
+.PHONY:	clean fclean re valgrind_run
+
+$(NAME): $(OBJS)
+	$(CC) $(INCLUDE) $(FLAGS) -o $(NAME) $(OBJS)
+
+clean:
+	rm -f $(OBJS) $(B_OBJS)
+
+valgrind_run:
+	valgrind ./philo 5 800 200 200 5
+
+valgrind: $(TARGET)
+	valgrind ./$(TARGET)
+
+helgrind: $(TARGET)
+	valgrind --tool=helgrind ./$(TARGET) 15 1000 50 50 5
+
+fclean: clean
+	rm -f $(NAME) $(BONUS)
+
+sanitize: $(OBJS)
+	$(CC) $(FLAGS) $(SANITIZE_FLAGS) $(INCLUDE) -o $(NAME)_sanitize $(OBJS)
+
+re: fclean all
+
+%.o: %.c $(HEADER)
+	$(CC) $(FLAGS) -c $<  -o $@
