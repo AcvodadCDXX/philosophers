@@ -1,0 +1,15 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Debug Philo (CodeLLDB)",
+            "type": "lldb",
+            "request": "launch",
+            "program": "${workspaceFolder}/philo",
+            "args": ["5", "800", "200", "200"],
+            "cwd": "${workspaceFolder}",
+            "terminal": "integrated",
+            "sourceLanguages": ["c"]
+        }
+    ]
+}
